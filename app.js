@@ -1,25 +1,9 @@
-const displayTodosButton = document.getElementById("displayTodosButton");
-const toggleAllButton = document.getElementById("toggleAllButton");
+
+
 
 let todoList = {
   // It should have a place to store todos
   todos: [],
-
-  // It should have a way to display todos
-  displayTodos: function() {
-    if (this.todos.length === 0) {
-      console.log(`Your todo list is empty`);
-    } else {
-      console.log("My todos: ");
-      for (let i = 0; i < this.todos.length; i++) {
-        if (this.todos[i].completed === true) {
-          console.log(`(x) - ${this.todos[i].todoText}`);
-        } else {
-          console.log(`( ) - ${this.todos[i].todoText}`);
-        }
-      }
-    }
-  },
 
   // It should have a way add new todos
   addTodos: function(todoText) {
@@ -27,60 +11,51 @@ let todoList = {
       todoText: todoText,
       completed: false
     });
-    this.displayTodos();
   },
 
   // It should have a way to change todos
   changeTodos: function(index, todoText) {
     this.todos[index].todoText = todoText;
-    this.displayTodos();
   },
 
   // It should have a way to delete a todo
   deleteTodos: function(index) {
     this.todos.splice(index, 1);
-    this.displayTodos();
   },
 
   toggleCompleted: function(index) {
     let todo = this.todos[index];
     todo.completed = !todo.completed;
-    this.displayTodos();
   },
 
   toggleAll: function() {
     let totalTodos = this.todos.length;
     let completedTodos = 0;
-    // Get number of completed todos.
-    for (let i = 0; i < totalTodos; i++) {
-      if (this.todos[i].completed === true) {
+    // Get number of competed todos.
+    this.todos.forEach(function(todo) {
+      if (todo.completed === true) {
         completedTodos++;
       }
-    }
-    // If everything is true, make everything false.
-    if (completedTodos === totalTodos) {
-      for (let i = 0; i < totalTodos; i++) {
-        this.todos[i].completed = false;
+    });
+
+    this.todos.forEach(function(todo) {
+      // Case 1: If everything's true, make everything false.
+      if (completedTodos === totalTodos) {
+        todo.completed = false;
+        // Case 2: Otherwise, make everything true.
+      } else {
+        todo.completed = true;
       }
-      // Else make everything true.
-    } else {
-      for (let i = 0; i < totalTodos; i++) {
-        this.todos[i].completed = true;
-      }
-    }
-    this.displayTodos();
+    });
   }
 };
 
 let handlers = {
-  displayTodos: function() {
-    todoList.displayTodos();
-  },
-
   addTodo: function() {
     let addTodoTextInput = document.getElementById("addTodoTextInput");
     todoList.addTodos(addTodoTextInput.value);
     addTodoTextInput.value = "";
+    view.displayTodos();
   },
 
   changeTodo: function() {
@@ -94,14 +69,12 @@ let handlers = {
     );
     changeTodoPoisitionInput.value = "";
     changeTodoTextInput.value = "";
+    view.displayTodos();
   },
 
-  deleteTodo: function() {
-    let deleteTodoPositionInput = document.getElementById(
-      "deleteTodoPositionInput"
-    );
-    todoList.deleteTodos(deleteTodoPositionInput.valueAsNumber);
-    deleteTodoPositionInput.value = "";
+  deleteTodo: function(index) {
+    todoList.deleteTodos(index);
+    view.displayTodos();
   },
 
   toggleCompleted: function() {
@@ -110,8 +83,56 @@ let handlers = {
     );
     todoList.toggleCompleted(toggleCompletedPositionInput.valueAsNumber);
     toggleCompletedPositionInput.value = "";
+    view.displayTodos();
   },
   toggleAll: function() {
     todoList.toggleAll();
+    view.displayTodos();
   }
 };
+
+let view = {
+  displayTodos: function() {
+    let todoUl = document.querySelector("ul");
+    todoUl.innerHTML = "";
+
+    todoList.todos.forEach(function(todo, index) {
+      let todoLi = document.createElement("li");
+      let todoTextWithCompletion = "";
+
+      if (todo.completed === true) {
+        todoTextWithCompletion = `(x) ${todo.todoText}`;
+      } else {
+        todoTextWithCompletion = `( ) ${todo.todoText}`;
+      }
+
+      todoLi.id = index;
+      todoLi.textContent = todoTextWithCompletion;
+      todoLi.appendChild(this.createDeleteButton());
+      todoUl.appendChild(todoLi);
+      // Value to use as THIS when executing callback.
+    }, this);
+  },
+
+  createDeleteButton: function() {
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "deleteButton";
+    return deleteButton;
+  },
+
+  setUpEventListeners: function() {
+    let todosUl = document.querySelector("ul");
+
+    todosUl.addEventListener("click", function(event) {
+      let elementClicked = event.target;
+
+      if (elementClicked.className === "deleteButton") {
+        handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+      }
+    });
+  }
+};
+
+view.setUpEventListeners();
+
