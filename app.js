@@ -1,5 +1,5 @@
-const displayTodosButton = document.getElementById("displayTodosButton");
-const toggleAllButton = document.getElementById("toggleAllButton");
+
+
 
 let todoList = {
   // It should have a place to store todos
@@ -31,23 +31,22 @@ let todoList = {
   toggleAll: function() {
     let totalTodos = this.todos.length;
     let completedTodos = 0;
-    // Get number of completed todos.
-    for (let i = 0; i < totalTodos; i++) {
-      if (this.todos[i].completed === true) {
+    // Get number of competed todos.
+    this.todos.forEach(function(todo) {
+      if (todo.completed === true) {
         completedTodos++;
       }
-    }
-    // If everything is true, make everything false.
-    if (completedTodos === totalTodos) {
-      for (let i = 0; i < totalTodos; i++) {
-        this.todos[i].completed = false;
+    });
+
+    this.todos.forEach(function(todo) {
+      // Case 1: If everything's true, make everything false.
+      if (completedTodos === totalTodos) {
+        todo.completed = false;
+        // Case 2: Otherwise, make everything true.
+      } else {
+        todo.completed = true;
       }
-      // Else make everything true.
-    } else {
-      for (let i = 0; i < totalTodos; i++) {
-        this.todos[i].completed = true;
-      }
-    }
+    });
   }
 };
 
@@ -73,12 +72,8 @@ let handlers = {
     view.displayTodos();
   },
 
-  deleteTodo: function() {
-    let deleteTodoPositionInput = document.getElementById(
-      "deleteTodoPositionInput"
-    );
-    todoList.deleteTodos(deleteTodoPositionInput.valueAsNumber);
-    deleteTodoPositionInput.value = "";
+  deleteTodo: function(index) {
+    todoList.deleteTodos(index);
     view.displayTodos();
   },
 
@@ -100,20 +95,45 @@ let view = {
   displayTodos: function() {
     let todoUl = document.querySelector("ul");
     todoUl.innerHTML = "";
-    
-    for (let i = 0; i < todoList.todos.length; i++) {
+
+    todoList.todos.forEach(function(todo, index) {
       let todoLi = document.createElement("li");
-      let todo = todoList.todos[i];
+    //   let todo = todoList.todos[i];
       let todoTextWithCompletion = "";
 
       if (todo.completed === true) {
-        todoTextWithCompletion = "(x) " + todo.todoText;
+        todoTextWithCompletion = `(x) ${todo.todoText}`;
       } else {
-        todoTextWithCompletion = "( )" + todo.todoText;
+        todoTextWithCompletion = `( ) ${todo.todoText}`;
       }
 
+      todoLi.id = index;
       todoLi.textContent = todoTextWithCompletion;
+      todoLi.appendChild(this.createDeleteButton());
       todoUl.appendChild(todoLi);
-    }
+      // Value to use as THIS when executing callback.
+    }, this);
+  },
+
+  createDeleteButton: function() {
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "deleteButton";
+    return deleteButton;
+  },
+
+  setUpEventListeners: function() {
+    let todosUl = document.querySelector("ul");
+
+    todosUl.addEventListener("click", function(event) {
+      let elementClicked = event.target;
+
+      if (elementClicked.className === "deleteButton") {
+        handlers.deleteTodo(parseInt(elementClicked.parentNode.id));
+      }
+    });
   }
 };
+
+view.setUpEventListeners();
+
