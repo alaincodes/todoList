@@ -98,7 +98,6 @@ let view = {
 
     todoList.todos.forEach(function(todo, index) {
       let todoLi = document.createElement("li");
-    //   let todo = todoList.todos[i];
       let todoTextWithCompletion = "";
 
       if (todo.completed === true) {
