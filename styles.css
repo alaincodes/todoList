@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: palevioletred;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid palevioletred;
+  max-width: 600px;
+  margin: 1rem auto;
+  height: 600px;
+  border-radius: 16px;
+}
+
+button {
+  border: none;
+  background: papayawhip;
+  border: 1px solid palevioletred;
+  border-radius: 8px;
+  margin: 0.5rem 0.5rem;
+  padding: 0.3rem 0.3rem;
+  color: palevioletred;
+  cursor: pointer;
+}
+
+input {
+  border-radius: 8px;
+  background: papayawhip;
+  border: 1px solid palevioletred;
+  margin: 0.5rem auto;
+  padding: 0.3rem 0.3rem;
+}

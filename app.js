@@ -1,6 +1,3 @@
-
-
-
 let todoList = {
   // It should have a place to store todos
   todos: [],
@@ -24,7 +21,7 @@ let todoList = {
   },
 
   toggleCompleted: function(index) {
-    let todo = this.todos[index];
+    let todo = this.todos[index - 1];
     todo.completed = !todo.completed;
   },
 
@@ -93,7 +90,7 @@ let handlers = {
 
 let view = {
   displayTodos: function() {
-    let todoUl = document.querySelector("ul");
+    let todoUl = document.querySelector("ol");
     todoUl.innerHTML = "";
 
     todoList.todos.forEach(function(todo, index) {
@@ -101,9 +98,9 @@ let view = {
       let todoTextWithCompletion = "";
 
       if (todo.completed === true) {
-        todoTextWithCompletion = `(x) ${todo.todoText}`;
+        todoTextWithCompletion = `[x] ${todo.todoText}`;
       } else {
-        todoTextWithCompletion = `( ) ${todo.todoText}`;
+        todoTextWithCompletion = `[ ] ${todo.todoText}`;
       }
 
       todoLi.id = index;
@@ -122,7 +119,7 @@ let view = {
   },
 
   setUpEventListeners: function() {
-    let todosUl = document.querySelector("ul");
+    let todosUl = document.querySelector("ol");
 
     todosUl.addEventListener("click", function(event) {
       let elementClicked = event.target;
@@ -135,4 +132,3 @@ let view = {
 };
 
 view.setUpEventListeners();
-// New

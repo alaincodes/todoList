@@ -8,30 +8,28 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <h1>Very Nice Todo List</h1>
+    <h1>My Todo List</h1>
     <div>
       <button onclick="handlers.toggleAll()">Toggle All</button>
     </div>
 
     <div>
-      <button onclick="handlers.addTodo()">Add</button>
-      <input id="addTodoTextInput" type="text">
+      <button onclick="handlers.addTodo()">Add Task</button>
+      <input id="addTodoTextInput" type="text" />
     </div>
 
     <div>
-      <button onclick="handlers.changeTodo()">Change Todo</button>
-      <input id="changeTodoPositionInput" type="number">
-      <input id="changeTodoTextInput" type="text">
+      <button onclick="handlers.changeTodo()">Change Task</button>
+      <input id="changeTodoPositionInput" type="number" />
+      <input id="changeTodoTextInput" type="text" />
     </div>
 
     <div>
-      <button onclick="handlers.toggleCompleted()">Toggle Completed</button>
-      <input id="toggleCompletedPositionInput" type="number">
+      <button onclick="handlers.toggleCompleted()">Task Completed</button>
+      <input id="toggleCompletedPositionInput" type="number" />
     </div>
 
-    <ul>
-
-    </ul>
+    <ol></ol>
 
     <script src="./app.js"></script>
   </body>
