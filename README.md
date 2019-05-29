@@ -1,3 +1,3 @@
 # todoList
 Building a TodoList with watchandcode.com
-Live : https://alaincodes.github.io/todoList/
+Live : https://optimistic-hermann-ad2f63.netlify.com/
